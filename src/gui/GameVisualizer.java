@@ -1,5 +1,7 @@
 package gui;
 
+import events.EventManager;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -16,6 +18,8 @@ import javax.swing.JPanel;
 public class GameVisualizer extends JPanel
 {
     private final Timer m_timer = initTimer();
+
+    public EventManager eventManager;
     
     private static Timer initTimer() 
     {
@@ -61,6 +65,7 @@ public class GameVisualizer extends JPanel
             }
         });
         setDoubleBuffered(true);
+        eventManager = new EventManager();
     }
 
     protected void setTargetPosition(Point p)
@@ -143,6 +148,9 @@ public class GameVisualizer extends JPanel
         m_robotPositionY = newY;
         double newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration); 
         m_robotDirection = newDirection;
+
+        eventManager.notifyObservers(
+                new Point((int)m_robotPositionX, (int)m_robotPositionY));
     }
 
     private static double asNormalizedRadians(double angle)
@@ -196,7 +204,6 @@ public class GameVisualizer extends JPanel
         fillOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
         g.setColor(Color.BLACK);
         drawOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
-        CoordinatesWindow.updateCoordinates((int)m_robotPositionX, (int)m_robotPositionY);
     }
     
     private void drawTarget(Graphics2D g, int x, int y)

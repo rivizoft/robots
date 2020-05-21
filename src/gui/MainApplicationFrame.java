@@ -1,20 +1,12 @@
 package gui;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import log.Logger;
 import windows.SaverStateWindows;
-import windows.Window;
-import windows.WindowsPositions;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 
 public class MainApplicationFrame extends JFrame
 {
@@ -35,15 +27,15 @@ public class MainApplicationFrame extends JFrame
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
+        CoordinatesWindow coordinatesWindow = new CoordinatesWindow();
+        addWindow(coordinatesWindow);
+
+        GameWindow gameWindow = new GameWindow(coordinatesWindow);
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 
-        CoordinatesWindow coordinatesWindow = new CoordinatesWindow(gameWindow.getVisualizer());
-        addWindow(coordinatesWindow);
-
         saverStateWindows = new SaverStateWindows(desktopPane.getAllFrames());
-        saverStateWindows.RestoreStateWindows();
+        saverStateWindows.restoreStateWindows();
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -169,7 +161,7 @@ public class MainApplicationFrame extends JFrame
         public void windowClosing(WindowEvent windowEvent)
         {
             try {
-                saverStateWindows.SaveStateWindows();
+                saverStateWindows.saveStateWindows();
             } catch (IOException e) {
                 e.printStackTrace();
             }

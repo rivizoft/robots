@@ -5,9 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class SaverStateWindows
@@ -19,7 +16,7 @@ public class SaverStateWindows
         _frames = frames;
     }
 
-    public void SaveStateWindows() throws IOException
+    public void saveStateWindows() throws IOException
     {
         File fileJSON = new File("positions.json");
         ArrayList<Window> windowList = new ArrayList<Window>();
@@ -42,7 +39,7 @@ public class SaverStateWindows
         mapper.writeValue(fileJSON, positionWindows);
     }
 
-    public void RestoreStateWindows() throws IOException
+    public void restoreStateWindows() throws IOException
     {
         ObjectMapper mapper = new ObjectMapper();
         WindowsPositions windowsPositions = mapper.readValue(new File("positions.json"), WindowsPositions.class);

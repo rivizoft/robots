@@ -1,16 +1,16 @@
 package gui;
 
-import log.LogEntry;
+import events.Observer;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CoordinatesWindow extends JInternalFrame
+public class CoordinatesWindow extends JInternalFrame implements Observer
 {
     private static TextArea m_coordinates;
     private static int m_prevX = 0, m_prevY = 0;
 
-    public CoordinatesWindow(GameVisualizer visualizer)
+    public CoordinatesWindow()
     {
         super("Координаты робота", true, true, true, true);
 
@@ -23,14 +23,16 @@ public class CoordinatesWindow extends JInternalFrame
         pack();
     }
 
-    public static void updateCoordinates(int x, int y)
+    @Override
+    public void update(Object o)
     {
-        if (x != m_prevX || y != m_prevY)
+        Point point = (Point)o;
+        if (point.x != m_prevX || point.y != m_prevY)
         {
-            m_coordinates.append("X: " + x + " Y: " + y + "\n");
+            m_coordinates.append("X: " + point.x + " Y: " + point.y + "\n");
             m_coordinates.invalidate();
         }
-        m_prevX = x;
-        m_prevY = y;
+        m_prevX = point.x;
+        m_prevY = point.y;
     }
 }
