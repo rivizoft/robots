@@ -3,10 +3,11 @@ package log;
 public final class Logger
 {
     private static final LogWindowSource defaultLogSource;
+
     static {
-        defaultLogSource = new LogWindowSource(100);
+        defaultLogSource = new LogWindowSource(10);
     }
-    
+
     private Logger()
     {
     }
@@ -19,6 +20,21 @@ public final class Logger
     public static void error(String strMessage)
     {
         defaultLogSource.append(LogLevel.Error, strMessage);
+    }
+
+    public static LogEntry lastMessage()
+    {
+        return defaultLogSource.getLastLogMessage();
+    }
+
+    public static LogEntry firstMessage()
+    {
+        return defaultLogSource.getFirstLogMessage();
+    }
+
+    public static int getAllowableSize()
+    {
+        return defaultLogSource.getAllowableSize();
     }
 
     public static LogWindowSource getDefaultLogSource()

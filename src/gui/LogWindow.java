@@ -1,15 +1,16 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.TextArea;
+import java.awt.*;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 
-import log.LogChangeListener;
-import log.LogEntry;
-import log.LogWindowSource;
+import log.*;
+import org.w3c.dom.Text;
 
 public class LogWindow extends JInternalFrame implements LogChangeListener
 {
@@ -33,12 +34,14 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
 
     private void updateLogContent()
     {
+        m_logContent.setText("");
         StringBuilder content = new StringBuilder();
         for (LogEntry entry : m_logSource.all())
         {
-            content.append(entry.getMessage()).append("\n");
+            m_logContent.append(entry.getMessage());
+            m_logContent.append("\n");
         }
-        m_logContent.setText(content.toString());
+        //m_logContent.setText(content.toString());
         m_logContent.invalidate();
     }
     

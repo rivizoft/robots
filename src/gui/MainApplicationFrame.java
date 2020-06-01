@@ -49,7 +49,7 @@ public class MainApplicationFrame extends JFrame
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
         logWindow.pack();
-        Logger.debug("Протокол работает");
+        Logger.debug("Лог работает, кол-во хранимых сообщений: " + Logger.getAllowableSize());
         return logWindow;
     }
     
@@ -92,10 +92,15 @@ public class MainApplicationFrame extends JFrame
                 "Тестовые команды");
         
         {
-            JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_S);
+            JMenuItem addLogMessageItem = new JMenuItem("Тестовое сообщение в лог", KeyEvent.VK_S);
             addLogMessageItem.addActionListener((event) -> {
-                Logger.debug("Тест");
+                Logger.debug("Тестовое сообщение");
             });
+            JMenuItem addLogMessageItem2 = new JMenuItem("Сообщение - ошибка", KeyEvent.VK_S);
+            addLogMessageItem2.addActionListener((event) -> {
+                Logger.error("Тестовое сообщение об ошибке");
+            });
+            testMenu.add(addLogMessageItem2);
             testMenu.add(addLogMessageItem);
         }
 
@@ -133,6 +138,7 @@ public class MainApplicationFrame extends JFrame
     {
         private void Exit()
         {
+            Logger.debug("Нажата кнопка выхода.");
             UIManager.put("OptionPane.yesButtonText"   , "Да");
             UIManager.put("OptionPane.noButtonText"    , "Нет");
 
