@@ -14,14 +14,14 @@ public class LogWindowSource
 {
     private int m_iQueueLength;
     
-    private volatile ArrayDeque<LogEntry> m_messages;
+    private LogMessages<LogEntry> m_messages;
     private final ArrayList<LogChangeListener> m_listeners;
     private volatile LogChangeListener[] m_activeListeners;
     
     public LogWindowSource(int iQueueLength) 
     {
         m_iQueueLength = iQueueLength;
-        m_messages = new ArrayDeque<LogEntry>(iQueueLength);
+        m_messages = new LogMessages<>(iQueueLength);
         m_listeners = new ArrayList<LogChangeListener>();
     }
     
@@ -36,12 +36,12 @@ public class LogWindowSource
 
     public LogEntry getLastLogMessage()
     {
-        return m_messages.getLast();
+        return m_messages.getLastMessage();
     }
 
     public LogEntry getFirstLogMessage()
     {
-        return m_messages.getFirst();
+        return m_messages.getFirstMessage();
     }
 
     public int getAllowableSize()
@@ -60,20 +60,8 @@ public class LogWindowSource
     
     public void append(LogLevel logLevel, String strMessage)
     {
-        if (m_messages.size() > m_iQueueLength)
-        {
-            synchronized (m_messages)
-            {
-                System.out.println("Последняя запись была удалена!");
-                m_messages.removeLast();
-            }
-        }
-
         LogEntry entry = new LogEntry(logLevel, strMessage);
-        synchronized (m_messages)
-        {
-            m_messages.push(entry);
-        }
+        m_messages.pushMessage(entry);
 
         LogChangeListener [] activeListeners = m_activeListeners;
 
@@ -106,8 +94,7 @@ public class LogWindowSource
             return Collections.emptyList();
         }
         int indexTo = Math.min(startFrom + count, m_messages.size());
-        //return m_messages.subList(startFrom, indexTo);
-        return null;
+        return m_messages.subList(startFrom, indexTo);
     }
 
     public Iterable<LogEntry> all()
