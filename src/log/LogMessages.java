@@ -36,7 +36,7 @@ public class LogMessages<T> implements Iterable<T>
         return _messages.size();
     }
 
-    public Iterable<T> subList(int from, int to)
+    public synchronized Iterable<T> subList(int from, int to)
     {
         LinkedList<T> newList = new LinkedList<>();
 
